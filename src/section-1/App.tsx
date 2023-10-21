@@ -1,11 +1,14 @@
 // Section 8- Building a Video Game Discovery App
 
-// Lesson 8- Building the Color Mode Switch
+// Lesson 9- Fetching the Games
+
+// From the 'GameGrid' component ->(16).- we´re going to render here the 'GameGrid' component
+// --- a) import GameGrid
+// --- b) render the 'GameGrid' component in the 'main' area
 
 import { Grid, GridItem, Show } from "@chakra-ui/react";
 import NavBar from "../components/NavBar";
-
-// ->(8) Remove the bg colors of the main and aside areas
+import GameGrid from "../components/GameGrid"; // <-(16.a)
 
 function App() {
   return (
@@ -18,11 +21,12 @@ function App() {
       <GridItem area="nav">
         <NavBar />
       </GridItem>
-      {/* (8)-> remove the bg color for the main and aside grid items */}
       <Show above="lg">
         <GridItem area="aside">Aside</GridItem>
       </Show>
-      <GridItem area="main">Main</GridItem>
+      <GridItem area="main">
+        <GameGrid />
+      </GridItem>
     </Grid>
   );
 }
