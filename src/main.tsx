@@ -1,3 +1,7 @@
+// Section 8- Building a Video Game Discovery App
+
+// Lesson 6- Building the Navigation Bar
+
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { ChakraProvider } from "@chakra-ui/react";
