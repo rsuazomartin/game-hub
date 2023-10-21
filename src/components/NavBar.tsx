@@ -1,28 +1,26 @@
 // Section 8- Building a Video Game Discovery App
 
-// Lesson 6- Building the Navigation Bar
+// Lesson 8- Building the Color Mode Switch
 
-// 1. In this step will build the basic layout of the navigation bar, not the search nor the
-// ... color mode switch, will tackle them later. In this layout we are going to layout our items horizontally, so to
-// ... do that we´ll use the component called 'HStack' from ChakraUI
-// 2. We will insert an image (logo). We need to import it as a regular module on the top from '../assets/logo.webp'
-// 3. Include the image with the 'Image' component of ChakraUI
-// 4. Go to the App component and render this 'NavBar' component ->(4)
-// ->(5) As the logo is to big, we reduce it with the property 'boxSize='60px'' from Chakra
-// 6. Now we can remove the bg color for this grid item (NavBar) in the App component (6)->
+// ->(7) We insert our '<ColorModeSwitch>' component instead of the test-text, but does not
+// ... looks so good, so
+// ... ->(8) we will remove the bg of our aside and main components in the 'App' component ->(8)
+// ->(10) The last thing to do here is push the switch to the right side in the NavBar component ->(10)
+// ... This is done with "justifyContent='space-between'" in <HStack> component and some padding='10px'
+
+// NOW is time to review our code and commit to our git repository
 
 import { HStack, Image, Text } from "@chakra-ui/react";
 import logo from "../assets/logo.webp"; // <-(2)
+import ColorModeSwitch from "./ColorModeSwitch";
 
 const NavBar = () => {
   return (
-    /* (1)-> */
-    <HStack>
-      {/* (5)-> Reduce the logo size */
-      /* insert the Image component of the logo (3)-> */}
+    // ->(10) justifyContent='space-between' in <HStack>
+    <HStack justifyContent="space-between" padding="10px">
       <Image src={logo} boxSize="60px" />
-      {/* Insert a text to probe the horizontal orientation of our NavBar component (6)-> */}
-      <Text>NavBar</Text>
+      {/* (7)-> Insert the render of our color mode switch */}
+      <ColorModeSwitch />
     </HStack>
   );
 };

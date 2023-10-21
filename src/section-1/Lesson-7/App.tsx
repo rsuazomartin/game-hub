@@ -1,11 +1,15 @@
 // Section 8- Building a Video Game Discovery App
 
-// Lesson 8- Building the Color Mode Switch
+// Lesson 6- Building the Navigation Bar
+
+// ->(6) remove the bg color for the NavBar grid item
+
+// Now make a new commit to the git repository with the name "Build the navigation bar"
 
 import { Grid, GridItem, Show } from "@chakra-ui/react";
 import NavBar from "../components/NavBar";
 
-// ->(8) Remove the bg colors of the main and aside areas
+// (4)->
 
 function App() {
   return (
@@ -15,14 +19,18 @@ function App() {
         lg: `"nav nav" "aside main"`,
       }}
     >
+      {/* (6)-> remove the bg color for the NavBar grid item */}
       <GridItem area="nav">
         <NavBar />
       </GridItem>
-      {/* (8)-> remove the bg color for the main and aside grid items */}
       <Show above="lg">
-        <GridItem area="aside">Aside</GridItem>
+        <GridItem area="aside" bg="gold">
+          Aside
+        </GridItem>
       </Show>
-      <GridItem area="main">Main</GridItem>
+      <GridItem area="main" bg="dodgerblue">
+        Main
+      </GridItem>
     </Grid>
   );
 }
