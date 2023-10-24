@@ -1,22 +1,20 @@
 // Section 8- Building a Video Game Discovery App
 
-// Lesson 12- Displaying Platform Icons
+// Lesson 13- Displaying Critic Score
 
-// SITUATION HERE.- To display the platform icons, we need to inspect the http requests we sent to the server.
-// ... In thre 'preview' tab we´ll see the results object returned and inspecting one game you´ll find the property 
-// --- 'current_platform' (array), you will see up to 6 platform property objects. We will use this property
+// ACTUAL SITUATION.-
+// We need to add a critic´s score assigned as "metacritic: number" under the 'results' in the chrome dev tools 
+// --- that we can find under object 'genres'. The color of this score goes lighter as higher.
 
-// 1.- First we need to add the property 'current_platform' to our 'Game' interface, but also ->(1.a) need to define 
-// ... a 'Platform' interface to define the shape of a 'platform' object, because 'parent_platform' is not an array,
-// --- but an array of objects of in which each object has a property called 'platform:' of the shape/type 'Platform'
+// 1.- We start adding a new property to our Game interface called "metacritic: number"
 
-// 2.- Now go to the 'GameCards' component to implement this feature, step by step.
+// 2.- The we add a new component called 'CriticScore.tsx' under the 'components' folder
 
 import { useEffect, useState } from "react";
 import apiClient from "../services/api-client";
 import { CanceledError } from "axios";
 
-export interface Platform {    // <-(1.a)
+export interface Platform {    
   id: number,
   name: string,
   slug: string
@@ -26,7 +24,8 @@ export interface Game {
     id: string;
     name: string;
     background_image: string,
-    parent_platforms:  { platform: Platform }[]  // <-(1),   <-(1.a)
+    parent_platforms:  { platform: Platform }[],
+    metacritic: number  // <-(1)-
 }
   
 interface FetchGamesResponse {    
