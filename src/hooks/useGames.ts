@@ -1,23 +1,32 @@
 // Section 8- Building a Video Game Discovery App
 
+// Lesson 12- Displaying Platform Icons
 
-// Lesson 11- Building Game Cards
+// SITUATION HERE.- To display the platform icons, we need to inspect the http requests we sent to the server.
+// ... In thre 'preview' tab we´ll see the results object returned and inspecting one game you´ll find the property 
+// --- 'current_platform' (array), you will see up to 6 platform property objects. We will use this property
 
-// From the 'GameCards' component ->(3).- we come here to export the 'Game' interface to the other modules
-// and (4)-> go to the 'GameCards' module to import it
+// 1.- First we need to add the property 'current_platform' to our 'Game' interface, but also ->(1.a) need to define 
+// ... a 'Platform' interface to define the shape of a 'platform' object, because 'parent_platform' is not an array,
+// --- but an array of objects of in which each object has a property called 'platform:' of the shape/type 'Platform'
 
-// From the GameCards component ->(6.a) We need to add some more properties to the 'Game' interface:
-// --- (6.a.1).- 'background_image: string' and we can use it in the 'src=' of the 'Image' component
-// --- ... of the 'Card' component of the 'GameCards' component
+// 2.- Now go to the 'GameCards' component to implement this feature, step by step.
 
 import { useEffect, useState } from "react";
 import apiClient from "../services/api-client";
 import { CanceledError } from "axios";
 
-export interface Game {   //<-(3) 'export' this interface to use it in 'GameCards' component
+export interface Platform {    // <-(1.a)
+  id: number,
+  name: string,
+  slug: string
+}
+
+export interface Game {   
     id: string;
     name: string;
-    background_image: string
+    background_image: string,
+    parent_platforms:  { platform: Platform }[]  // <-(1),   <-(1.a)
 }
   
 interface FetchGamesResponse {    
@@ -43,7 +52,7 @@ const useGames = () => {
         return () => controller.abort();  
     }, []);     
   
-    return { games, error };    // <-(4)
+    return { games, error };    
 }
 
-export default useGames;    // <-(2)
+export default useGames;    
