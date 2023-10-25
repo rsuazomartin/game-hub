@@ -1,14 +1,20 @@
 // Section 8- Building a Video Game Discovery App
 
-// Lesson 13- Displaying Critic Score
+// Lesson 14- Getting Optimized Images
 
 // ACTUAL SITUATION.-
-// We need to add a critic´s score assigned as "metacritic: number" under the 'results' in the chrome dev tools 
-// --- that we can find under object 'genres'. The color of this score goes lighter as higher.
+// This images are pretty big, so in slow connections will take time to load them. In this lesson We are going 
+// --- to learn how to convert them to smaller formats without loosing definition to increase speed up the page load.
 
-// 1.- We start adding a new property to our Game interface called "metacritic: number"
+// 1.- In chrome developer tools we can go to the "network" tab, the choose the request, then we filter for "img"
+// --- and copy the image URL appearing when left-mouse-button and "copy image URL" and paste it in the browser.
+// --- You will see the image (a big one) and if you insert a (crop parameter) dimension separated 
+// --- by "/" (crop/600/400/) right after the "media.rawg.io/media/" it will get a smaller image that we can 
+// --- use instead of the big one
 
-// 2.- The we add a new component called 'CriticScore.tsx' under the 'components' folder
+// 2.- But we don´t want our insert this functionality in our 'GameCard' component, because it´s a distraction;
+// --- So, to do this we will create a new utility/service to modify the image URL (with the crop parameter) 
+// --- called "image-url.ts" in the 'services' folder, and now go to there -(2)->
 
 import { useEffect, useState } from "react";
 import apiClient from "../services/api-client";
@@ -25,7 +31,7 @@ export interface Game {
     name: string;
     background_image: string,
     parent_platforms:  { platform: Platform }[],
-    metacritic: number  // <-(1)-
+    metacritic: number
 }
   
 interface FetchGamesResponse {    
