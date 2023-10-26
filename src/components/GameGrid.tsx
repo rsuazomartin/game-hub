@@ -1,26 +1,21 @@
 // Section 8- Building a Video Game Discovery App
 
-// Lesson 15- Loading Skeletons
+// Lesson 16- Refactor- Removing Duplicated Styles
 
-// 4.- Now here in our 'GameGrid' component we´re going to render the 'GameCardSkeleton' component >-(4)->, but
-// --- only when "isLoading === true". So first, >-(4.a)-> let´s add "isLoading" to our call to the 'useGames' hook
+// 7.- We came here from the 'GameCardContainer' component to >-(7)-> first wrap the <GameCardSkeleton />
+// --- into the <GameCardContainer>, and then >-(7.a)-> do the same with the <GameCard> component
 
-// 5.- To render the skeletons we need to define an array of let´s say 6 skeletons, because when loading, we have
-// --- to >-(5.a)-> match each game card with its skeleton component below, and set the 'key={skeleton}'
+// 8. Test the results. FINE, so commit our code with name "Refactor: remove duplicated styles"
 
-// IMPORTANT NOTE.- Lesson done, but <skeletonText> does not function the background skeleton shows, but the
-// --- skeleton text doesn´t. Let´s commit our changes with name "Show loading skeletons"
-
-import React, { useEffect, useState } from "react";
-import apiClient from "../services/api-client";
 import { SimpleGrid, Text } from "@chakra-ui/react";
 import useGames from "../hooks/useGames";
 import GameCards from "./GameCards";
 import GameCardSkeleton from "./GameCardSkeleton";
+import GameCardContainer from "./GameCardContainer";
 
 const GameGrid = () => {
-  const { games, error, isLoading } = useGames(); // <-(4.a)-< Add 'isLoading' >
-  const skeletons = [1, 2, 3, 4, 5, 6]; // <-(5)-< initialize 'skeletons' array>
+  const { games, error, isLoading } = useGames();
+  const skeletons = [1, 2, 3, 4, 5, 6];
   return (
     <>
       {error && <Text>{error}</Text>}
@@ -29,11 +24,18 @@ const GameGrid = () => {
         padding="10px"
         spacing={10}
       >
-        {/* <-(5.a)-< render skeletons if isLoading is true> */}
         {isLoading &&
-          skeletons.map((skeleton) => <GameCardSkeleton key={skeleton} />)}
+          skeletons.map((skeleton) => (
+            // <-(7)-< Insert the <GameCardSkeleton> inside a <GameCardContainer>
+            <GameCardContainer>
+              <GameCardSkeleton key={skeleton} />
+            </GameCardContainer>
+          ))}
         {games.map((game) => (
-          <GameCards key={game.id} game={game} />
+          // <-(7.a)-< Insert the <GameCard> inside the GameCardContainer
+          <GameCardContainer>
+            <GameCards key={game.id} game={game} />
+          </GameCardContainer>
         ))}
       </SimpleGrid>
     </>

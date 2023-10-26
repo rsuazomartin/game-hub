@@ -1,16 +1,13 @@
 // Section 8- Building a Video Game Discovery App
 
-// Lesson 14- Getting Optimized Images
+// Lesson 16- Refactor- Removing Duplicated Styles
 
-// From the "image-url" component >-(7)->.- Insert the call to the service "getCroppedImageURL" where
-// --- we´re rendering our game image, and pass it the original image as an argument. Save our component
-// --- and test it
+// Everything is fine (with the exception of the <SkeletonText> component), but we have duplication of styles
+// ... in the 'GameCards' component. So it´s better if we create another component named 'GameCardContnainer.tsx'
+// ... to be the container for our cards, and then apply all the styles for that container.
 
-// LESSON END.- As a side gain from this step, we find that now all images are the same size and uniform
-// --- in all game cards, not as before where there were ones larger than others.
-// SO, save the changes and commit to git with name "Get Optimized Images"
+// 1.- Add a new component called 'GameCardContainer.tsx' >-(1)-> and go to it
 
-import React from "react";
 import { Game } from "../hooks/useGames";
 import { Card, CardBody, HStack, Heading, Image } from "@chakra-ui/react";
 import PlatformIconList from "./PlatformIconList";
@@ -23,16 +20,15 @@ interface Props {
 
 const GameCards = ({ game }: Props) => {
   return (
-    <Card width="300px" borderRadius={10} overflow="hidden">
+    // <-(4)-< remove the styles arguments from the <Card> component
+    <Card>
       <Image src={getCroppedImageURL(game.background_image)}></Image>
       <CardBody>
         <Heading fontSize="2xl">{game.name}</Heading>
-        {/* -(4.a)->  */}
         <HStack justify="space-between">
           <PlatformIconList
             platforms={game.parent_platforms.map((p) => p.platform)}
           />
-          {/* -(4)-> */}
           <CriticScore score={game.metacritic} />
         </HStack>
       </CardBody>
