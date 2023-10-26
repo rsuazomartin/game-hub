@@ -1,20 +1,18 @@
 // Section 8- Building a Video Game Discovery App
 
-// Lesson 14- Getting Optimized Images
+// Lesson 15- Loading Skeletons
 
-// ACTUAL SITUATION.-
-// This images are pretty big, so in slow connections will take time to load them. In this lesson We are going 
-// --- to learn how to convert them to smaller formats without loosing definition to increase speed up the page load.
+// SITUATION.- Everything it´s fine. Now to improve the user experience, we are going to show 'loading skeletons'
+// --- while our user is waiting for the server to send the data and actually seeng it on the browser.
 
-// 1.- In chrome developer tools we can go to the "network" tab, the choose the request, then we filter for "img"
-// --- and copy the image URL appearing when left-mouse-button and "copy image URL" and paste it in the browser.
-// --- You will see the image (a big one) and if you insert a (crop parameter) dimension separated 
-// --- by "/" (crop/600/400/) right after the "media.rawg.io/media/" it will get a smaller image that we can 
-// --- use instead of the big one
+// 1.- First we need to implement an "isLoading" state and initialize it to 'false' and >-(1.a)-> set it to "true"
+// --- just before we call our API, and >-(1.b)-> set it back to "false" once we have received our data from the server
+// --- at the end of the .'then' clause, and >-(1.c)-> after the ".catch" if we catch an error instead of data.
+// --- Now at the end >-(1.d)-> we need to add "isLoading" to the return clause from our hook
 
-// 2.- But we don´t want our insert this functionality in our 'GameCard' component, because it´s a distraction;
-// --- So, to do this we will create a new utility/service to modify the image URL (with the crop parameter) 
-// --- called "image-url.ts" in the 'services' folder, and now go to there -(2)->
+// 2.- To render the "loading skeleton" for our user while is waiting, we must render him the game card skeleton 
+// --- instead of the game card, because they are not the same. and this will be done by another different component
+// --- we are going to create under the 'components' folder with the name of "GameCardSkeleton.tsx" >-(2)-> 
 
 import { useEffect, useState } from "react";
 import apiClient from "../services/api-client";
@@ -35,29 +33,35 @@ export interface Game {
 }
   
 interface FetchGamesResponse {    
-count: number;
-results: Game[];
+  count: number;
+  results: Game[];
   }
 
 const useGames = () => {    
-    const [games, setGames] = useState<Game[]>([]);   
-    const [error, setError] = useState("");
+  const [games, setGames] = useState<Game[]>([]);   
+  const [error, setError] = useState("");
+  const [isLoading, setLoading] = useState(false);    // <-(1)-<
   
-    useEffect(() => {    
-        const controller = new AbortController();   
-
+  useEffect(() => {    
+    const controller = new AbortController();   
+    
+    setLoading(true);   // <-(1.a)-<
       apiClient    
         .get<FetchGamesResponse>("/games", { signal: controller.signal })   
-        .then((res) => setGames(res.data.results))
-        .catch((err) => {
-            if (err instanceof CanceledError) return;   
-            setError(err.message)
+        .then((res) => {
+          setGames(res.data.results);
+          setLoading(false);   // <-(1.b)-<
+      })
+      .catch((err) => {
+        if (err instanceof CanceledError) return;   
+        setError(err.message)
+        setLoading(false);   // <-(1.c)-<
         });
 
         return () => controller.abort();  
     }, []);     
   
-    return { games, error };    
+    return { games, error, isLoading };    // <-(1.d)-< 
 }
 
 export default useGames;    

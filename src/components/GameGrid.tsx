@@ -1,47 +1,38 @@
 // Section 8- Building a Video Game Discovery App
 
-// Lesson 11- Building Game Cards
+// Lesson 15- Loading Skeletons
 
-// From the 'GameCards' component, we come here to ->(7) render a 'SimpleGrid' component (chakraUI)
-// --- instead of the <ul>. And will (7.a) set the 'columns={3}' parameter and 'spacing={10}' pixels
-// --- ... so our cards aren´t too close to each other
-// --- (7.b).- now we´re going to replace the <li> item to our 'GameCards' component
-// --- ... We set the 'key' to 'game.id' and pass the 'game' as a Prop
+// 4.- Now here in our 'GameGrid' component we´re going to render the 'GameCardSkeleton' component >-(4)->, but
+// --- only when "isLoading === true". So first, >-(4.a)-> let´s add "isLoading" to our call to the 'useGames' hook
 
-// 8.- ACTUAL SITUATION.- Looking at our browser, we did ok, but sharp corners, so
-// --- Go to the 'GameCards' component ->(8.a) border radius needs to be improved in the 'Card' component
+// 5.- To render the skeletons we need to define an array of let´s say 6 skeletons, because when loading, we have
+// --- to >-(5.a)-> match each game card with its skeleton component below, and set the 'key={skeleton}'
 
-// --- From the 'GameCards' componennt
-// ->(8.c) Number of columns should be: mobile devices = 1 column, tablets= 2 columns and 3 or more columns in larger
-// --- ... screens. so here in the 'GameGrid' component have to do it.
-// --- ... instead of hardcoding the number of columns, we´ll pass an object with hard-valued properties with
-// --- ... size of the screens, see: "columns={{ sm: 1, md: 2, lg: 3, xl: 5 }}".
-// --- ... As there isn´t padding and cards are next to the screen edge, we´ll add "padding={10}"
-
-// ACTUAL SITUATION.- We can see that the aside area is almost inexistent, so we´ll revisited  number of columns
-// --- again in later stages of the project when we implement the aside panel.
-
-// NOW it´s time to commite our progress with name "Building the game cards"
+// IMPORTANT NOTE.- Lesson done, but <skeletonText> does not function the background skeleton shows, but the
+// --- skeleton text doesn´t. Let´s commit our changes with name "Show loading skeletons"
 
 import React, { useEffect, useState } from "react";
 import apiClient from "../services/api-client";
 import { SimpleGrid, Text } from "@chakra-ui/react";
 import useGames from "../hooks/useGames";
 import GameCards from "./GameCards";
+import GameCardSkeleton from "./GameCardSkeleton";
 
 const GameGrid = () => {
-  const { games, error } = useGames(); // <-(5)
+  const { games, error, isLoading } = useGames(); // <-(4.a)-< Add 'isLoading' >
+  const skeletons = [1, 2, 3, 4, 5, 6]; // <-(5)-< initialize 'skeletons' array>
   return (
     <>
       {error && <Text>{error}</Text>}
-      {/* Render 'SimpleGrid' component (7)-> */}
       <SimpleGrid
         columns={{ sm: 1, md: 2, lg: 3, xl: 5 }}
         padding="10px"
         spacing={10}
       >
+        {/* <-(5.a)-< render skeletons if isLoading is true> */}
+        {isLoading &&
+          skeletons.map((skeleton) => <GameCardSkeleton key={skeleton} />)}
         {games.map((game) => (
-          // (7.b)->
           <GameCards key={game.id} game={game} />
         ))}
       </SimpleGrid>
