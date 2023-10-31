@@ -14,9 +14,14 @@
 // --- instead of the game card, because they are not the same. and this will be done by another different component
 // --- we are going to create under the 'components' folder with the name of "GameCardSkeleton.tsx" >-(2)-> 
 
-import { useEffect, useState } from "react";
-import apiClient from "../services/api-client";
-import { CanceledError } from "axios";
+// >-(14)-> We came here from the 'GenreList' module to use our new 'useData' hook. Here se delete (comment)
+// --- the 'FetchGamesResponse' interface 
+
+// 15.- Remove all the code including the braces of the useGames function ( now this is done in the 'useData' hook)
+// ... and replace it with useData<Game>('/games'). Now test our application (Has error in line 'x' of 'GameGrid'
+// ... component so, >-(16)-> go there)
+
+import useData from "./useData";
 
 export interface Platform {    
   id: number,
@@ -31,37 +36,15 @@ export interface Game {
     parent_platforms:  { platform: Platform }[],
     metacritic: number
 }
-  
-interface FetchGamesResponse {    
-  count: number;
-  results: Game[];
-  }
 
-const useGames = () => {    
-  const [games, setGames] = useState<Game[]>([]);   
-  const [error, setError] = useState("");
-  const [isLoading, setLoading] = useState(false);    // <-(1)-<
-  
-  useEffect(() => {    
-    const controller = new AbortController();   
-    
-    setLoading(true);   // <-(1.a)-<
-      apiClient    
-        .get<FetchGamesResponse>("/games", { signal: controller.signal })   
-        .then((res) => {
-          setGames(res.data.results);
-          setLoading(false);   // <-(1.b)-<
-      })
-      .catch((err) => {
-        if (err instanceof CanceledError) return;   
-        setError(err.message)
-        setLoading(false);   // <-(1.c)-<
-        });
+// >-(14)-> delete the 'FetchGamesResponse', we don´t need it
+// interface FetchGamesResponse {    
+//   count: number;
+//   results: Game[];
+//   }
 
-        return () => controller.abort();  
-    }, []);     
-  
-    return { games, error, isLoading };    // <-(1.d)-< 
-}
+// >-(15)-> replace all the function code with useData<Game>('/games') giving the generic type the <Game> value and passing
+// --- the endpoint for '/games'
+const useGames = () => useData<Game>('/games')
 
 export default useGames;    
