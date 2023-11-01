@@ -1,20 +1,19 @@
 // Section 8- Building a Video Game Discovery App
 
-// Lesson 17- Fetching the Genres
+// Lesson 19- Displaying the Genres
 
-// ACTUAL SITUATION.-
-// Everything is working fine, so it´s time to start building our Aside panel where we eventually will place
-// --- the list of Genres of the games, so when we click on a Genre, our GameGrid will only show the games
-// --- pertaining to the choosen Genre.
+// >-(4.c)-> We came here from the 'GenreLIst' component to apply a padding to the "aside" area
+// --- to give some space between off the edge of the screen, and also >-(4.d)-> give a fixed width to it
+// --- so wouldn´t be problems when adding more real space, the gamegrid stretches to take up the
+// --- available space. This is done creating an object with the widths of the base and lg size displays
+// --- ... with the 'templateColums' specification.
 
-// 8.- Now came here from the 'GenreList' component to render the new <GenreList> component  >-(8)->.
-// --- we´ll instert this instead of the <div> inside the 'Aside' area
+// 5.- Now we have to chane the fixed width of <box> component the 'GameCardContainer' to a resizeable with.
+// --- >-(5)-> Let´s go there
 
-// END OF LESSON.- It´s all for now, so commit our changes with the name "Fetch the genres"
-
-import { Grid, GridItem, Show } from "@chakra-ui/react";
+import { Grid, GridItem, Show, baseTheme } from "@chakra-ui/react";
 import NavBar from "../components/NavBar";
-import GameGrid from "../components/GameGrid"; // <-(16.a)
+import GameGrid from "../components/GameGrid";
 import GenreList from "../components/GenreList";
 
 function App() {
@@ -24,13 +23,18 @@ function App() {
         base: `"nav" "main"`,
         lg: `"nav nav" "aside main"`,
       }}
+      templateColumns={{
+        base: "1fr",
+        lg: "200px 1fr",
+      }}
     >
       <GridItem area="nav">
         <NavBar />
       </GridItem>
       <Show above="lg">
-        <GridItem area="aside">
-          {/*  >-(8)-> Insert the <GenreList> component*/}
+        {/* >-(4.c)-> apply a padding to the "aside" area */}
+        <GridItem area="aside" paddingX={5}>
+          {" "}
           <GenreList />
         </GridItem>
       </Show>

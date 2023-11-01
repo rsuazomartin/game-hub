@@ -1,34 +1,45 @@
 // Section 8- Building a Video Game Discovery App
 
-// Lesson 18- Creating a Generic Data Fetching Hook
+// Lesson 19- Displaying the Genres
 
-// >-(9)-> We came here from the 'useData' new hook to test our new hook
+// 2.- We came here from the 'useGenres' service to >-(2)-> to use the chakra <List> component
+// ... instead of the <ul>, similarly, we replace the <li>s with the <ListItem> defined in chakra
 
-// 10.- Change 'genre' and 'genres' for 'data'
+// 3.- In this <ListItem> specification, we need to replace the "{genre.name}" with and <HStack>
+// --- inside it we need to create and <Image> chakra component with the values given below, and
+// --- as we need the small images, we call 'getCroppedImageUrl' function under the
+// --- 'image-url' service passing the parameter 'genre.image_background'
 
-// 11.- Now the problem here is that our component deal with providing the 'endpoint' to the HTTP request,
-// --- assigning "/genres" to it, and should give this responsibility to the 'useGenres' hook, so
-// --- first >-(11)-> go there and to some changes and then comeback.
+// 4.- Right after the image we render the '{genre.name}' under a <Text> chakra component, ant then
+// --- test it in the browser.... Fine, but things to improve: >-(4.a)-> Need vertucal space between
+// --- ... each genre, so vertical padding, so in the <ListItem paddingY="5px">, >-(4.b)-> fontSize='lg'
+// --- ... in the <Text> component. >-(4.c)-> Apply a padding to the "aside" area in the App component
 
-// >-(13)-> We came here from the module to do some changes. First we must change 'useData' for 'useGenres()'
-// --- and remove all unused import statements [Ctrl+.]. And see if our application is still working. Good !!
-
-// NOW WE MUST GO TO THE GAMES FETCH SCHEME AND MODIFY IT USING OUR NEW GENERIC DATA FETCHING HOOK
-// --- so, >-(14)-> go to the 'useGames' hook to modify it
-
+import { HStack, Image, List, ListItem, Text } from "@chakra-ui/react";
 import useGenres from "../hooks/useGenres";
+import getCroppedImageURL from "../services/image-url";
 
 const GenreList = () => {
-  // >-(10)-> Change 'genre' and 'genres' for 'data'
-  // >-(13)-> Now we must change 'useData' for 'useGenres()'
   const { data } = useGenres();
   return (
-    <ul>
-      {/* >-(10)-> Change 'genre' and 'genres' for 'data' */}
+    // >-(2)-> to use the chakra <List> component and <ListItems> and >-(4)-> <HStack> component with
+    // --- <Image> and <Text> chakra components
+    <List>
       {data.map((genre) => (
-        <li key={genre.id}>{genre.name}</li>
+        <ListItem key={genre.id} paddingY="5px">
+          {" "}
+          {/* >-(4.a)->  */}
+          <HStack>
+            <Image
+              boxSize="32px"
+              borderRadius={8}
+              src={getCroppedImageURL(genre.image_background)}
+            />
+            <Text fontSize="lg">{genre.name}</Text> {/* >-(4.b)->  */}
+          </HStack>
+        </ListItem>
       ))}
-    </ul>
+    </List>
   );
 };
 

@@ -1,12 +1,12 @@
 // Section 8- Building a Video Game Discovery App
 
-// Lesson 18- Creaating a Generic Data Hook
+// Lesson 19- Displaying the Genres
 
-// >-(16)-> We came here from the 'useGames' component, when we tested our changes got an error in line '28'
-// ... of 'GameGrid' component (found in the chrome-dev-tools) so, >-(16)-> inspecting our code here,
-// ... we found that we are still receiving 'games' between the returned parameters from the 'useData'
-// ... hook, and this needs to be changed to 'data'... do it wherever it´s found. Testing...
-// ... fine. So it´s time to commit our changes to git with name "Create a generic data fetching hook"
+// 6.- We came here because there´s too much space between cards so, to reduce this space >-(6)-> to change
+// --- it from {10} to {3}
+
+// END OF LESSON.- We tested our changes in all browser sizes and everything it´s good, so let´s commit our
+// --- changes with the name "Displaying the genres"
 
 import { SimpleGrid, Text } from "@chakra-ui/react";
 import useGames from "../hooks/useGames";
@@ -21,9 +21,10 @@ const GameGrid = () => {
     <>
       {error && <Text>{error}</Text>}
       <SimpleGrid
-        columns={{ sm: 1, md: 2, lg: 2, xl: 4 }}
-        padding="10px"
-        spacing={10}
+        columns={{ sm: 1, md: 2, lg: 3, xl: 5 }}
+        padding="5px"
+        //  >-(6)-> change the 'spacing' from {10} to {3}
+        spacing={3}
       >
         {isLoading &&
           skeletons.map((skeleton) => (

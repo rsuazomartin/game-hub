@@ -1,24 +1,24 @@
 // Section 8- Building a Video Game Discovery App
 
-// Lesson 18- Creting a Generic Data Fetching Hook
+// Lesson 19- Displaying the Genres
 
-// >-(11).-> Now the problem here is that this component should deal with providing the 'endpoint' to the HTTP request, 
-// --- assigning "/genres" to it, and should release the 'GenreList' component from this responsibility, so
-// --- first >-(11)-> We don´t need the 'FetchGenresResponse' interface anymore, so comment it
+// ACTUAL SITUATION. Now we need to add the image to the left of the name of the genre. Looking into 
+// --- Chrome-dev-tootls under Network an selecting 'Fetch/XHR', will see all the fetchs we´ve made 
+// --- to the server. Click on the 'genres?key' one, and then select the 'Preview' tab, look for the results
+// --- we´ll see an image_background; This is what we´re looking for.
 
-// 12.- We don´t need the body of the function 'useGenres' because we now do all this in the 
-// --- 'useData' generic hook, so remove it, as all the import without use
+// 1.- Here in the 'useGenres' interface >-(1)-> add the property 'image_background: string' to the 'Genre' interface
 
-// 13.- Now go to the 'GenreList' component and do more changes
+// 2.- Go to the 'GenreList' >-(2)-> to use the chakra <List> component instead of the <ul>
 
 import useData from "./useData";
 
+//  >-(1)-> add the property 'image_background: string'
 export interface Genre {
     id: number,
-    name: string
+    name: string,
+    image_background: string
 }
 
-// 12.- Remove the body of the function 'useGenres' and call the useData<Genre>("/genres") with 
-// --- the 'Genre' type and "/genres" as the 'endpoint' parameter
 const useGenres = () => useData<Genre>("/genres");
 export default useGenres;
