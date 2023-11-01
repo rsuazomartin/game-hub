@@ -1,29 +1,29 @@
 // Section 8- Building a Video Game Discovery App
 
-// Lesson 19- Displaying the Genres
+// Lesson 20- Showing a Spinner
 
-// 2.- We came here from the 'useGenres' service to >-(2)-> to use the chakra <List> component
-// ... instead of the <ul>, similarly, we replace the <li>s with the <ListItem> defined in chakra
+// 1.- We would like to show a spinner while our genre list is loading, so all we have to do here
+// --- is to import the 'isLoading' state and show a <Spinner> chakra component if 'isLoading' is true
 
-// 3.- In this <ListItem> specification, we need to replace the "{genre.name}" with and <HStack>
-// --- inside it we need to create and <Image> chakra component with the values given below, and
-// --- as we need the small images, we call 'getCroppedImageUrl' function under the
-// --- 'image-url' service passing the parameter 'genre.image_background'
+// 2.- in case we receive an error from the Genres fetch? Then >-(2)-> import the 'error' also, and return 'null'
+// --- if the error occurs showing nothing
 
-// 4.- Right after the image we render the '{genre.name}' under a <Text> chakra component, ant then
-// --- test it in the browser.... Fine, but things to improve: >-(4.a)-> Need vertucal space between
-// --- ... each genre, so vertical padding, so in the <ListItem paddingY="5px">, >-(4.b)-> fontSize='lg'
-// --- ... in the <Text> component. >-(4.c)-> Apply a padding to the "aside" area in the App component
+// END OF LESSON.- Once tested our changes, it´s time to commit our changes to git with name
+// --- "Show a spinner while fetching the genres"
 
-import { HStack, Image, List, ListItem, Text } from "@chakra-ui/react";
+import { HStack, Image, List, ListItem, Spinner, Text } from "@chakra-ui/react";
 import useGenres from "../hooks/useGenres";
 import getCroppedImageURL from "../services/image-url";
 
 const GenreList = () => {
-  const { data } = useGenres();
+  // >-(1)-> Import isLoading, / >-(2)-> import error in case of errors
+  const { data, isLoading, error } = useGenres();
+  // >-(1.a) return the <Spinner> component if isLoading is true
+  if (isLoading) return <Spinner />;
+  // >-(2) return null if error is true
+  if (error) return null;
+
   return (
-    // >-(2)-> to use the chakra <List> component and <ListItems> and >-(4)-> <HStack> component with
-    // --- <Image> and <Text> chakra components
     <List>
       {data.map((genre) => (
         <ListItem key={genre.id} paddingY="5px">
@@ -35,7 +35,7 @@ const GenreList = () => {
               borderRadius={8}
               src={getCroppedImageURL(genre.image_background)}
             />
-            <Text fontSize="lg">{genre.name}</Text> {/* >-(4.b)->  */}
+            <Text fontSize="lg">{genre.name}</Text>
           </HStack>
         </ListItem>
       ))}
