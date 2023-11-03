@@ -1,27 +1,28 @@
 // Section 8- Building a Video Game Discovery App
 
-// Lesson 15- Loading Skeletons
+// Lesson 21- Filtering Games by Genre
 
-// SITUATION.- Everything it´s fine. Now to improve the user experience, we are going to show 'loading skeletons'
-// --- while our user is waiting for the server to send the data and actually seeng it on the browser.
+// >-(8.b)-> We came here from the 'GameGrid' component to include the "selecedGenre: Genre | null" as receiving
+// --- parameters to pass it to the 'useData' hook to fetch the games of the 'selectedGenre'
 
-// 1.- First we need to implement an "isLoading" state and initialize it to 'false' and >-(1.a)-> set it to "true"
-// --- just before we call our API, and >-(1.b)-> set it back to "false" once we have received our data from the server
-// --- at the end of the .'then' clause, and >-(1.c)-> after the ".catch" if we catch an error instead of data.
-// --- Now at the end >-(1.d)-> we need to add "isLoading" to the return clause from our hook
+// 9.- Now we have to pass this parameters to the 'useData' hook, but currently this hook only receives 
+// --- the 'endpoint' (/games) as parameter, but we can make this more flexible  by giving it an 
+// --- 'AxiosRequestConfigObject', to do this we go to the 
 
-// 2.- To render the "loading skeleton" for our user while is waiting, we must render him the game card skeleton 
-// --- instead of the game card, because they are not the same. and this will be done by another different component
-// --- we are going to create under the 'components' folder with the name of "GameCardSkeleton.tsx" >-(2)-> 
+// >-(11)-> We came here from the 'useData' hook to include a 2nd parameter in the call. This will be the
+// --- an object with a property called 'params' which is a property of the 'AxiosRequestConfig' object, we set 
+// --- this property as an object and in this object we set the property 'genres' (See the rawg.io documentation)
+// --- to 'selectedGenres.id' (React automatically add '?' cause this is an optional parameter that can be null).
 
-// >-(14)-> We came here from the 'GenreList' module to use our new 'useData' hook. Here se delete (comment)
-// --- the 'FetchGamesResponse' interface 
+// 12.- Now se send this parameter to the 'useData' hook and go there to continue >-(12)->
 
-// 15.- Remove all the code including the braces of the useGames function ( now this is done in the 'useData' hook)
-// ... and replace it with useData<Game>('/games'). Now test our application (Has error in line 'x' of 'GameGrid'
-// ... component so, >-(16)-> go there)
+// >-(15)->.- We came here from the 'useData' hook to send our dependencies to the 'useData' hook. So, add our 3rd 
+// --- parameter '[selectedGenre?.id]' when calling the 'useData' hook >-(15)->
+
+// 16.- Now our last step. Go to the App component and >-(16)-> pass the 'selectedGenre' o our 'GameGrid' component 
 
 import useData from "./useData";
+import { Genre } from "./useGenres";
 
 export interface Platform {    
   id: number,
@@ -37,14 +38,7 @@ export interface Game {
     metacritic: number
 }
 
-// >-(14)-> delete the 'FetchGamesResponse', we don´t need it
-// interface FetchGamesResponse {    
-//   count: number;
-//   results: Game[];
-//   }
-
-// >-(15)-> replace all the function code with useData<Game>('/games') giving the generic type the <Game> value and passing
-// --- the endpoint for '/games'
-const useGames = () => useData<Game>('/games')
+// >-(15)-> Add our dependencies as a 3rd parameter [selectedGenre?.id]
+const useGames = (selectedGenre: Genre | null ) => useData<Game>('/games', { params: { genres: selectedGenre?.id}}, [selectedGenre?.id])
 
 export default useGames;    

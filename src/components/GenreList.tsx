@@ -1,41 +1,69 @@
 // Section 8- Building a Video Game Discovery App
 
-// Lesson 20- Showing a Spinner
+// Lesson 21- Filtering Games by Genre
 
-// 1.- We would like to show a spinner while our genre list is loading, so all we have to do here
-// --- is to import the 'isLoading' state and show a <Spinner> chakra component if 'isLoading' is true
+// ACTUAL SITUATION.-Everything looks good. So our next step is filtering the games by genre
 
-// 2.- in case we receive an error from the Genres fetch? Then >-(2)-> import the 'error' also, and return 'null'
-// --- if the error occurs showing nothing
+// 1.- The first thing is to add a <Button> chakra componene instead of the <Text> one for the name
+// --- of the Genre >-(1)-> and variant='link' to switch our button with a link. Now >-(1.a)->
+// --- set the selected Genre and log it on the console.- This is the Genre which we´re currently
+// --- rendering
 
-// END OF LESSON.- Once tested our changes, it´s time to commit our changes to git with name
-// --- "Show a spinner while fetching the genres"
+// IMPORTAN.- Now the GenreList component should inform this App component that it the 'selectedGenre' must be set
+// --- because the component that defines the state should be the only one to update it. So goto >-(4)-> the GenreList
+// --- component to create a 'Props' that holds a call-back function to pass the 'genre' info here.
 
-import { HStack, Image, List, ListItem, Spinner, Text } from "@chakra-ui/react";
-import useGenres from "../hooks/useGenres";
+// 5.- Include the '{ onSelectGenre }: Props' as parameter in the 'GenreList' function
+
+// 6.- Finally, instead of login on the console the selected 'genre', we´ll pass it to 'onSelectGenre' call-back function
+// --- of the 'Props' interface
+
+// NOW WE HAVE An ERROR IN THE App COMPONENT. >-(7)-> Go there, it´s because we don´t have passed this 'Props'
+// --- to our <GenreList> component
+
+import {
+  Button,
+  HStack,
+  Image,
+  List,
+  ListItem,
+  Spinner,
+  Text,
+} from "@chakra-ui/react";
+import useGenres, { Genre } from "../hooks/useGenres";
 import getCroppedImageURL from "../services/image-url";
 
-const GenreList = () => {
-  // >-(1)-> Import isLoading, / >-(2)-> import error in case of errors
+// >-(4)-> create a 'Props' that holds a function to pass the 'genre' to the App component importing the type 'Genre'
+// --- from the 'useGenres' hook
+interface Props {
+  onSelectGenre: (genre: Genre) => void;
+}
+
+// >-(5)-> insert the 'Props' as parameters in the 'GenreList' function
+const GenreList = ({ onSelectGenre }: Props) => {
   const { data, isLoading, error } = useGenres();
-  // >-(1.a) return the <Spinner> component if isLoading is true
   if (isLoading) return <Spinner />;
-  // >-(2) return null if error is true
   if (error) return null;
 
   return (
     <List>
       {data.map((genre) => (
         <ListItem key={genre.id} paddingY="5px">
-          {" "}
-          {/* >-(4.a)->  */}
           <HStack>
             <Image
               boxSize="32px"
               borderRadius={8}
               src={getCroppedImageURL(genre.image_background)}
             />
-            <Text fontSize="lg">{genre.name}</Text>
+            {/*  >-(1)-> /  >-(1.a)-> */}
+            <Button
+              variant="link"
+              fontSize="lg"
+              // >-(6)-> pass 'genre' as parameter to the 'onSelectGenre' call-back function when 'onClick'
+              onClick={() => onSelectGenre(genre)}
+            >
+              {genre.name}
+            </Button>
           </HStack>
         </ListItem>
       ))}

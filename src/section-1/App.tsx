@@ -1,22 +1,39 @@
 // Section 8- Building a Video Game Discovery App
 
-// Lesson 19- Displaying the Genres
+// Lesson 21- Filtering Games by Genre
 
-// >-(4.c)-> We came here from the 'GenreLIst' component to apply a padding to the "aside" area
-// --- to give some space between off the edge of the screen, and also >-(4.d)-> give a fixed width to it
-// --- so wouldn´t be problems when adding more real space, the gamegrid stretches to take up the
-// --- available space. This is done creating an object with the widths of the base and lg size displays
-// --- ... with the 'templateColums' specification.
+// We came here from the 'GameGrid' component to >-(3)-> create an state variable to store the selected Genre. As the useState
+// --- doesn´t know what is the type of the state (because of the null value), we need to specify (beween angle brackets)
+// --- that this state is a generic type <Genre> or null.
 
-// 5.- Now we have to chane the fixed width of <box> component the 'GameCardContainer' to a resizeable with.
-// --- >-(5)-> Let´s go there
+// IMPORTAN.- Now the GenreList component should inform this App component that it the 'selectedGenre' must be set
+// --- because the component that defines the state should be the only one to update it. So goto >-(4)-> the GenreList
+// --- component to create a 'Props' that holds a function to pass the 'genre' info here.
+
+// >-(7)-> WE CAME HERE FROM THE GenreList component because NOW WE HAVE An ERROR IN THIS COMPONENT. it´s because we don´t
+// --- have passed this 'Props' to our <GenreList> component
+
+// NOW TEST our progress up to here. inspect the Chrome-dev-tools and look in the components tab, look for the App component
+// ... and see our hooks, we have a state variable and inside we find the genre object that holds the genre that
+// ... we have choosen (try choose other genres and see that our object changes accordingly). PERFECT !!!
+
+// NOW IT´S TIME TO PASS THE SELECTED GENRE TO THE GAMEGRID COMPONENT TO SHOW THE SELECTED GENRE´S GAMES, SO IT
+// --- CAN PASS IT TO THE BACK-END WHILE FETCHING THE GAMES. So let´s go to >-(8)-> the 'GameGrid' component
+// --- to continue
+
+// >-(16)-> We came here from the 'useGames' component to pass the 'selectedGenre' to our 'GameGrid' component
+
+// END OF LESSON.- Everything works fine, so it´s time to commit our code with name "Filter games by genre"
 
 import { Grid, GridItem, Show, baseTheme } from "@chakra-ui/react";
 import NavBar from "../components/NavBar";
 import GameGrid from "../components/GameGrid";
 import GenreList from "../components/GenreList";
+import { useState } from "react";
+import { Genre } from "../hooks/useGenres";
 
 function App() {
+  const [selectedGenre, setSelectedGenre] = useState<Genre | null>(null);
   return (
     <Grid
       templateAreas={{
@@ -32,14 +49,14 @@ function App() {
         <NavBar />
       </GridItem>
       <Show above="lg">
-        {/* >-(4.c)-> apply a padding to the "aside" area */}
         <GridItem area="aside" paddingX={5}>
-          {" "}
-          <GenreList />
+          {/* >-(7)-> Pass the 'genre' object to a function that 'setSelectedGenre' giving it (genre) as parameter */}
+          <GenreList onSelectGenre={(genre) => setSelectedGenre(genre)} />
         </GridItem>
       </Show>
       <GridItem area="main">
-        <GameGrid />
+        {/* >-(16)-> Add selectedGenre={selectedGenre} to pass this parameter to the GameGrid */}
+        <GameGrid selectedGenre={selectedGenre} />
       </GridItem>
     </Grid>
   );
