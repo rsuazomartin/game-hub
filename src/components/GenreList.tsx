@@ -1,25 +1,17 @@
 // Section 8- Building a Video Game Discovery App
 
-// Lesson 21- Filtering Games by Genre
+// Lesson 22- Highlighting the Selected Genre
 
-// ACTUAL SITUATION.-Everything looks good. So our next step is filtering the games by genre
+// These lesson is to highlight the Genre name when selected (this selection is passed from the App component),
+// --- so we need to >-(1)-> add the "selectedGenre: Genre | null" to the Props, so in this component, when we are
+// --- rendering the <Button> chakra component, se should weight the font to bold when selected or normal
+// --- when unselected
 
-// 1.- The first thing is to add a <Button> chakra componene instead of the <Text> one for the name
-// --- of the Genre >-(1)-> and variant='link' to switch our button with a link. Now >-(1.a)->
-// --- set the selected Genre and log it on the console.- This is the Genre which we´re currently
-// --- rendering
+// 2.- Now, while rendering the <Button> we should test if the "genre.id === selectedGenre.id" and
+// --- bold it if true or normal otherwise
 
-// IMPORTAN.- Now the GenreList component should inform this App component that it the 'selectedGenre' must be set
-// --- because the component that defines the state should be the only one to update it. So goto >-(4)-> the GenreList
-// --- component to create a 'Props' that holds a call-back function to pass the 'genre' info here.
-
-// 5.- Include the '{ onSelectGenre }: Props' as parameter in the 'GenreList' function
-
-// 6.- Finally, instead of login on the console the selected 'genre', we´ll pass it to 'onSelectGenre' call-back function
-// --- of the 'Props' interface
-
-// NOW WE HAVE An ERROR IN THE App COMPONENT. >-(7)-> Go there, it´s because we don´t have passed this 'Props'
-// --- to our <GenreList> component
+// 3.- Once our 'GenreList' component renders bold or normal the 'fontWeight' for the genre, we go to the App
+// --- component to receive the 'selectedGenre' from this component
 
 import {
   Button,
@@ -33,14 +25,15 @@ import {
 import useGenres, { Genre } from "../hooks/useGenres";
 import getCroppedImageURL from "../services/image-url";
 
-// >-(4)-> create a 'Props' that holds a function to pass the 'genre' to the App component importing the type 'Genre'
-// --- from the 'useGenres' hook
+// >-(1)-> modify the 'Props' to add the selectedGenre and >-(1.a)_> include it on the parameters
+// --- of the 'GenreList' function
 interface Props {
   onSelectGenre: (genre: Genre) => void;
+  selectedGenre: Genre | null;
 }
 
-// >-(5)-> insert the 'Props' as parameters in the 'GenreList' function
-const GenreList = ({ onSelectGenre }: Props) => {
+// >-(1.a)-> insert the 'Props' as parameters in the 'GenreList' function
+const GenreList = ({ selectedGenre, onSelectGenre }: Props) => {
   const { data, isLoading, error } = useGenres();
   if (isLoading) return <Spinner />;
   if (error) return null;
@@ -55,8 +48,9 @@ const GenreList = ({ onSelectGenre }: Props) => {
               borderRadius={8}
               src={getCroppedImageURL(genre.image_background)}
             />
-            {/*  >-(1)-> /  >-(1.a)-> */}
             <Button
+              // >-(2)-> render the font as bold or normal
+              fontWeight={genre.id === selectedGenre?.id ? "bold" : "normal"}
               variant="link"
               fontSize="lg"
               // >-(6)-> pass 'genre' as parameter to the 'onSelectGenre' call-back function when 'onClick'
