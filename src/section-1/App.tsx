@@ -1,11 +1,14 @@
 // Section 8- Building a Video Game Discovery App
 
-// Lesson 22- Highlighting the Selected Genre
+// Lesson 23- Building Platform Selector
 
-// >-(3)-> Once our 'GenreList' component renders bold or normal the 'fontWeight' for the genre, we came here
-// --- to receive (include) the 'selectedGenre' Prop to the 'GenreList' component, as 'selectedGenre={selectedGenre}'
+// 2.- We came here from the new 'PlatformSelector' component to render the <PlatformSelector> component
+// --- right above the <GameGrid> component >-(2)->
 
-// END OF LESSON.- It´s time to commit our code with name "Highlight the selected genre"
+// TESTED.- Beautifull ! Now we should render this items dinamically. To do this we´ll use a diferent endpoint
+// --- on RAWG api, si we look in the site documentation under 'Plarforms' and see that there´s an endpoint
+// --- for parent platforms called "/platforms/lists/parents". So we´ll create a new hook called 'usePlatform'
+// --- under the 'hooks' folder. Go there >-(3)->
 
 import { Grid, GridItem, Show, baseTheme } from "@chakra-ui/react";
 import NavBar from "../components/NavBar";
@@ -13,6 +16,7 @@ import GameGrid from "../components/GameGrid";
 import GenreList from "../components/GenreList";
 import { useState } from "react";
 import { Genre } from "../hooks/useGenres";
+import PlatformSelector from "../components/PlatformSelector";
 
 function App() {
   const [selectedGenre, setSelectedGenre] = useState<Genre | null>(null);
@@ -33,13 +37,14 @@ function App() {
       <Show above="lg">
         <GridItem area="aside" paddingX={5}>
           <GenreList
-            // >-(3)-> include the selectedGenre={selectedGenre} in the <Button> chakra component
             selectedGenre={selectedGenre}
             onSelectGenre={(genre) => setSelectedGenre(genre)}
           />
         </GridItem>
       </Show>
       <GridItem area="main">
+        {/*  >-(2)-> render the 'PlatformSelector' component */}
+        <PlatformSelector />
         <GameGrid selectedGenre={selectedGenre} />
       </GridItem>
     </Grid>
