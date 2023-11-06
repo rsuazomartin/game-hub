@@ -1,25 +1,19 @@
 // Section 8- Building a Video Game Discovery App
 
-// Lesson 21- Filtering Games by Genre
+// Lesson 24- Filtering Games by Platform
 
-// >-(8.b)-> We came here from the 'GameGrid' component to include the "selecedGenre: Genre | null" as receiving
-// --- parameters to pass it to the 'useData' hook to fetch the games of the 'selectedGenre'
+// >-(7)->.- We came here from the 'GameGrid' component to add 'selectedPlatform' as a 2nd parameter which
+// --- can be a 'Platform' object or null -> 'selectedPlatform: Platform | null' >-(7)->, and
+// --- ... >-(7.a)-> we should pass it to the RAwGAPI. To do this we need to add a 3rd parameter to the useGames
+// --- ... call as 'Platforms:' (which is a property of he config object) and assign it the 'selectedPlatform?.id'
+// --- ... (which is optional), and then >-(7.b)-> also need to add it as a received parameter when this
+// --- ... component (function useGames) is called, so we add it as 'selectedPlatform:' of type "Platform | null".
+// --- ... We should also add this to our dependencies array, so when it changes it refreshes the data >-(7.c)-> 
 
-// 9.- Now we have to pass this parameters to the 'useData' hook, but currently this hook only receives 
-// --- the 'endpoint' (/games) as parameter, but we can make this more flexible  by giving it an 
-// --- 'AxiosRequestConfigObject', to do this we go to the 
-
-// >-(11)-> We came here from the 'useData' hook to include a 2nd parameter in the call. This will be the
-// --- an object with a property called 'params' which is a property of the 'AxiosRequestConfig' object, we set 
-// --- this property as an object and in this object we set the property 'genres' (See the rawg.io documentation)
-// --- to 'selectedGenres.id' (React automatically add '?' cause this is an optional parameter that can be null).
-
-// 12.- Now se send this parameter to the 'useData' hook and go there to continue >-(12)->
-
-// >-(15)->.- We came here from the 'useData' hook to send our dependencies to the 'useData' hook. So, add our 3rd 
-// --- parameter '[selectedGenre?.id]' when calling the 'useData' hook >-(15)->
-
-// 16.- Now our last step. Go to the App component and >-(16)-> pass the 'selectedGenre' o our 'GameGrid' component 
+// TESTING DE APP.- Good, our GameGrid is showing games for our selected platform. But is not clear 
+// --- which platform is selected, so we should render the button selector label dinamically to show the
+// --- selected plaforrm. To to this we should go to the App component to pass the 'selectedPlatform' to 
+// --- our 'PlatformSelector' component, so it can use it as the label of the button. So go there >-(8)->
 
 import useData from "./useData";
 import { Genre } from "./useGenres";
@@ -27,7 +21,7 @@ import { Genre } from "./useGenres";
 export interface Platform {    
   id: number,
   name: string,
-  slug: string
+  slug: string,
 }
 
 export interface Game {   
@@ -38,7 +32,16 @@ export interface Game {
     metacritic: number
 }
 
-// >-(15)-> Add our dependencies as a 3rd parameter [selectedGenre?.id]
-const useGames = (selectedGenre: Genre | null ) => useData<Game>('/games', { params: { genres: selectedGenre?.id}}, [selectedGenre?.id])
+// >-(7.b)-> add 'selectedPlatform:' of type Platform | null
+// >-(7.a)-> assign 'selectedPlatform?.id:' to the call of the function 'useData' as a 2nd parameter 
+// --- ... of the 'AxiosRequestConfig' object
+// >-(7.c)-> Add 'selectedPlatform?.id' to our dependencies array
+const useGames = (selectedGenre: Genre | null, selectedPlatform: Platform | null) => 
+  useData<Game>('/games', 
+  { params: { 
+    genres: selectedGenre?.id, 
+    platforms: selectedPlatform?.id}}, 
+    [selectedGenre?.id, 
+      selectedPlatform?.id]);
 
 export default useGames;    

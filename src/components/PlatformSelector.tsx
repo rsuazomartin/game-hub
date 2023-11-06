@@ -1,50 +1,63 @@
 // Section 8- Building a Video Game Discovery App
 
-// Lesson 23- Building Platform Selector
+// Lesson 24- Filtering Games by Platform
 
-// TO ADD the platform selector, We will first only render a list of choices, so we created a new
-// --- component (this one) called "PlatformSelector.tsx" in the 'components' folder.
+// >-(2)->.- We came here from the App component to notify the App component when the user selects a Platform
+// --- it should be notified. So, we define an object 'Props' with a property which is a function called
+// --- 'onSelectPlatform' and when the user selects a platform takes a parameter called 'platform' of
+// --- type Platform and returns void. >-(2)->
+// --- ... >-(2.a)-> Also add it as parameters received in the 'PlatformSelector' function hook
 
-// 1.- First we´re going to render a <Menu> chakra component. Inside this menu we´ll create a <MenuList>
-// --- which will contain various <MenuItems> (With hardcoded content for the moment, just to test how
-// --- will look).
+// 3.- We need to handle the click event, so add the onClick={ to a call-back function and pass it
+// --- to onSelectPlatform() with the parameter platform} >-(3)->
 
-// 2.- Second, we go to the App component to render the <PlatformSelector> component
+// 4.- Now we need to go to the App component to add the 'onSelectPlatform' function as parameter in
+// --- our <PlatformSelector> component
 
-// >-(7)->.- We return here from the 'usePlatforms' component to use our new hook to get the data for
-// --- platforms to be render >-(7)->
+// >-(9)-> We came here from the App component to add the property 'selectedPlatform' (as a Platform
+// --- object or null)to our Props, so we can pass it here from the App component. We also should add
+// --- it to the parameter Props to our 'PlatformSelector' function. And finally we need to
+// --- ... condition the label 'Platforms' when no 'selectedPlatform?.name' in the <MenuButton>
+// --- ... chakra component >-(10)->
 
-// 8.- And finally, se should render the platform names in the <ListItem> dinamically
+// TESTING THE APP.- Fine, we can see in the query parameters of the 'Payload' tab of the network tab of
+// --- chrome dev tools, that we are passing 2 parameters: 'genres' and 'platforms'
 
-// TEST.- Everything works as expected, beautifull.
-
-// 9.- What if an error happens? Let´s grab the error from our 'usePlatforms' hook, and in case of error
-// --- return null >-(9)->.
-
-// TEST the new error handling scheme... Fine !
-
-// END OF LESSON.- Now it´s time to commit our code to "Build platform selector"
+// END OF LESSON.- It´s time to commit our changes to git given name "filter games by platform"
 
 import { Button, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import { BsChevronDown } from "react-icons/bs";
 import usePlatforms from "../hooks/usePlatforms";
+import { Platform } from "../hooks/useGames";
 
-const PlatformSelector = () => {
-  //  >-(7)-> use our new hook to get the data
-  //  >-(9)-> Get the error from our 'usePlatform' hook
+//  >-(2)-> create a Props with a function to pass the platform of type Platform to be used by the App component
+// >-(9)-> add the property selectedPlatform to our Props which , so we can pass it here from the App component
+interface Props {
+  onSelectPlatform: (platform: Platform) => void;
+  selectedPlatform: Platform | null;
+}
+
+// >-(2.a)-> include onSelectPlatform as Props
+const PlatformSelector = ({ onSelectPlatform, selectedPlatform }: Props) => {
   const { data, error } = usePlatforms();
 
-  //  >-(9)-> return null in case of error
   if (error) return null;
 
   return (
     <Menu>
       <MenuButton as={Button} rightIcon={<BsChevronDown />}>
-        Platforms
+        {/* >-(10)-> render selectedPlatform?.name or 'Platforms' */}
+        {selectedPlatform?.name || "Platforms"}
       </MenuButton>
       <MenuList>
+        {/*  >-(3)-> add the onClick event to the <Menu> component */}
         {data.map((platform) => (
-          <MenuItem key={platform.id}>{platform.name}</MenuItem>
+          <MenuItem
+            onClick={() => onSelectPlatform(platform)}
+            key={platform.id}
+          >
+            {platform.name}
+          </MenuItem>
         ))}
       </MenuList>
     </Menu>
