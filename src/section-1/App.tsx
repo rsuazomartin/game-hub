@@ -1,33 +1,24 @@
 // Section 8- Building a Video Game Discovery App
 
-// Lesson 24- Filtering Games by Platform
+// Lesson 25- Refactoring- Extracting a Query Object
 
-// The purpose of this lesson is to pass another parameter (selectedPlatform) to the 'useData' hook
-// --- to fetch only the games for the selected platform. Here we´ll use the same approach that the one
-// --- we used to filter the games by genre.
+// ACTUAL SITUATION.- Ok, Here we have a code that is a pair of references to state
+// --- variables, and as our application goes on, it will be more like sort order, search phrases, etc.
+// --- and because of this our code is ugly, clothed and larger. It´s better to pack related variabes
+// --- inside of an object that handles all variables and states that we need, using what we call a
+// --- query object pattern, creating a query object that handles all the info we need to query
+// --- the games database
 
-// 1.- So, first we need to create an state variable to handle the changes in the selected platform
-// --- to pass it to the 'GameGrid' for filtering. We´ll call it "selectedPlatform"
+// 1.- We will create an interface called 'gameQuery' with 2 properties: 'genre: Ganer | null', and a
+// --- 'platform: Platform | null' >-(1)->
 
-// 2.- Go to our 'PlatformSelector' component and when the user clicks on a Platform, we should
-// --- notify this App component >-(2)->
+// 2.- Replace this 2 cons [selected...] with a new state variable: of type <GameQuery> inicitalized to an
+// --- empty object '{} as GameQuery' and call it 'gameQuery' and the function 'setGameQuery' to update it
 
-// >-(4)->.- We came here from the 'PlatformSelector' component to add the 'onSelectPlatform'
-// --- function as parameter in our <PlatformSelector> component(which is in error)
+// 3.- Now we need to update all the references to the previous state variables 'selectedGenre',
+// --- 'setSelectedGenre', 'selectedPlatform' and 'setSelectedPlatform' that now are in error >-(3)->
 
-// TESTING.- If we click on a platform, we can see in the 'Components' tab that our App component
-// --- has an object with our platform selected and updates every time we click on another platform, Fine!
-// --- BUT no selection has been applied to our 'GameGrid', so we need to pass the 'selectedPlatform'
-
-// 5.- So, in the <GameGrid> component rendering, we need to pass the 'selectedPlatform={selectedPlatform}'
-// --- and as selectedPlatform is not defined here, we need to go the our 'GameGrid' component and
-// --- add the 'selectedPlatform: Platform | null' to our interface 'Props' >-(5)->
-
-// >-(8)->.- We came here from the 'useGames' hook to pass the 'selectedPlatform' (and set it to
-// --- 'selectedPlatform') to our 'PlatformSelector' component, so it can use it as the label
-// --- of the button. >-(8)->. It gives an error because we should add this property to the Props object
-// ... defined in the 'PlatformSelector' component so we can pass it as a Prop, so go there and add it
-// --- ... >-(9)->
+// 4.- Now we need to apply the same techniche in our 'GameGrid', so go there >-(4)->
 
 import { Grid, GridItem, Show, baseTheme } from "@chakra-ui/react";
 import NavBar from "../components/NavBar";
@@ -38,11 +29,20 @@ import { Genre } from "../hooks/useGenres";
 import PlatformSelector from "../components/PlatformSelector";
 import { Platform } from "../hooks/useGames";
 
+// >-(1)-> Create interface GameQuery with genre and platform properties
+export interface GameQuery {
+  genre: Genre | null;
+  platform: Platform | null;
+}
+
 function App() {
-  const [selectedGenre, setSelectedGenre] = useState<Genre | null>(null);
-  const [selectedPlatform, setSelectedPlatform] = useState<Platform | null>(
-    null
-  );
+  // >-(2)-> remove this 2 ugly const
+  // const [selectedGenre, setSelectedGenre] = useState<Genre | null>(null);
+  // const [selectedPlatform, setSelectedPlatform] = useState<Platform | null>(
+  //   null
+  // );
+  // >-(2)->
+  const [gameQuery, setGameQuery] = useState<GameQuery>({} as GameQuery);
 
   return (
     <Grid
@@ -61,21 +61,27 @@ function App() {
       <Show above="lg">
         <GridItem area="aside" paddingX={5}>
           <GenreList
-            selectedGenre={selectedGenre}
-            onSelectGenre={(genre) => setSelectedGenre(genre)}
+            //  >-(3)-> change all references to the previous state variables
+            selectedGenre={gameQuery.genre}
+            //  >-(3)-> change all references to the previous state variables, spreaging the 'gameQuery'
+            // --- properties and then add the genre (to update it)
+            onSelectGenre={(genre) => setGameQuery({ ...gameQuery, genre })}
           />
         </GridItem>
       </Show>
       <GridItem area="main">
         <PlatformSelector
-          // >-(8)-> add the selectedPlatform argument and set it to 'selectedPlatform'
-          selectedPlatform={selectedPlatform}
-          // >-(4)-> insert onSelectPlatform to setSelectedPlatform with the platform selected *
-          onSelectPlatform={(platform) => setSelectedPlatform(platform)}
+          //  >-(3)-> change all references to the previous state variables
+          selectedPlatform={gameQuery.platform}
+          //  >-(3)-> change all references to the previous state variables, spreaging the 'gameQuery'
+          // --- properties and then add the platform (to update it)
+          onSelectPlatform={(platform) =>
+            setGameQuery({ ...gameQuery, platform })
+          }
         />
         <GameGrid
-          selectedPlatform={selectedPlatform}
-          selectedGenre={selectedGenre}
+          // >-(3)-> here we pass the new 'gameQuery' query object
+          gameQuery={gameQuery}
         />
       </GridItem>
     </Grid>

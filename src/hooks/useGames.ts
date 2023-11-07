@@ -1,22 +1,17 @@
 // Section 8- Building a Video Game Discovery App
 
-// Lesson 24- Filtering Games by Platform
+// Lesson 25- Refactoring- Extracting a Query Object
 
-// >-(7)->.- We came here from the 'GameGrid' component to add 'selectedPlatform' as a 2nd parameter which
-// --- can be a 'Platform' object or null -> 'selectedPlatform: Platform | null' >-(7)->, and
-// --- ... >-(7.a)-> we should pass it to the RAwGAPI. To do this we need to add a 3rd parameter to the useGames
-// --- ... call as 'Platforms:' (which is a property of he config object) and assign it the 'selectedPlatform?.id'
-// --- ... (which is optional), and then >-(7.b)-> also need to add it as a received parameter when this
-// --- ... component (function useGames) is called, so we add it as 'selectedPlatform:' of type "Platform | null".
-// --- ... We should also add this to our dependencies array, so when it changes it refreshes the data >-(7.c)-> 
+// 4.- Now we need to apply the same technick in our 'useGames' hook to replace the old state variables
+// --- with the new 'gameQuery' query object >-(4)->
 
-// TESTING DE APP.- Good, our GameGrid is showing games for our selected platform. But is not clear 
-// --- which platform is selected, so we should render the button selector label dinamically to show the
-// --- selected plaforrm. To to this we should go to the App component to pass the 'selectedPlatform' to 
-// --- our 'PlatformSelector' component, so it can use it as the label of the button. So go there >-(8)->
+// TESTING OUR CHANGES.- Everything is working but the the playstation 'platform' shows nothing no matter 
+// --- which genre we choose--- something to investigate
 
+// END OF LESSON.- Commit our code with name "Refactoring: extract a query object"
+
+import { GameQuery } from "../section-1/App";
 import useData from "./useData";
-import { Genre } from "./useGenres";
 
 export interface Platform {    
   id: number,
@@ -32,16 +27,14 @@ export interface Game {
     metacritic: number
 }
 
-// >-(7.b)-> add 'selectedPlatform:' of type Platform | null
-// >-(7.a)-> assign 'selectedPlatform?.id:' to the call of the function 'useData' as a 2nd parameter 
-// --- ... of the 'AxiosRequestConfig' object
-// >-(7.c)-> Add 'selectedPlatform?.id' to our dependencies array
-const useGames = (selectedGenre: Genre | null, selectedPlatform: Platform | null) => 
+const useGames = (gameQuery: GameQuery) => 
   useData<Game>('/games', 
+  // >-(4)-> This is the only place where we´ll need to work with individual values
   { params: { 
-    genres: selectedGenre?.id, 
-    platforms: selectedPlatform?.id}}, 
-    [selectedGenre?.id, 
-      selectedPlatform?.id]);
+    genres: gameQuery.genre?.id, 
+    platforms: gameQuery.platform?.id}}, 
+    // >-(4)-> here we pass the dependencies array with only 'gameQuery' so whenever one of his properties
+    // --- changes, it will resend our fetch requests
+    [gameQuery]);
 
 export default useGames;    
