@@ -34,7 +34,7 @@ const useGames = (gameQuery: GameQuery) =>
     genres: gameQuery.genre?.id, 
     platforms: gameQuery.platform?.id}}, 
     // >-(4)-> here we pass the dependencies array with only 'gameQuery' so whenever one of his properties
-    // --- changes, it will resend our fetch requests
+    // --- changes, it will resend our fetch request
     [gameQuery]);
 
 export default useGames;    
