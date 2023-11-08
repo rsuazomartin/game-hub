@@ -24,6 +24,7 @@ import {
 } from "@chakra-ui/react";
 import useGenres, { Genre } from "../hooks/useGenres";
 import getCroppedImageURL from "../services/image-url";
+import { wrap } from "framer-motion";
 
 // >-(1)-> modify the 'Props' to add the selectedGenre and >-(1.a)_> include it on the parameters
 // --- of the 'GenreList' function
@@ -56,7 +57,9 @@ const GenreList = ({ selectedGenre, onSelectGenre }: Props) => {
               // >-(6)-> pass 'genre' as parameter to the 'onSelectGenre' call-back function when 'onClick'
               onClick={() => onSelectGenre(genre)}
             >
-              {genre.name}
+              <Text textAlign={"left"} whiteSpace={"wrap"}>
+                {genre.name}
+              </Text>
             </Button>
           </HStack>
         </ListItem>

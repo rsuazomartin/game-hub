@@ -1,25 +1,23 @@
 // Section 8- Building a Video Game Discovery App
 
-// Lesson 8- Building the Color Mode Switch
+// Lesson 30- Building Search Input
 
-// ->(7) We insert our '<ColorModeSwitch>' component instead of the test-text, but does not
-// ... looks so good, so
-// ... ->(8) we will remove the bg of our aside and main components in the 'App' component ->(8)
-// ->(10) The last thing to do here is push the switch to the right side in the NavBar component ->(10)
-// ... This is done with "justifyContent='space-between'" in <HStack> component and some padding='10px'
+// >-(3)->.- We came here from the new 'SearchInput' component to add it to this 'NavBar'
+// --- component >-(3)-> right after the <Image> component
 
-// NOW is time to review our code and commit to our git repository
+// TESTING.- Good! But we have splited the Color Mode label in 2 lines. Add whitSpace='nowrap' to the <Text>
+// --- statement in the 'ColorModeSwitch' component >-(4)->
 
 import { HStack, Image, Text } from "@chakra-ui/react";
-import logo from "../assets/logo.webp"; // <-(2)
+import logo from "../assets/logo.webp";
 import ColorModeSwitch from "./ColorModeSwitch";
+import SearchInput from "./SearchInput";
 
 const NavBar = () => {
   return (
-    // ->(10) justifyContent='space-between' in <HStack>
     <HStack justifyContent="space-between" padding="10px">
       <Image src={logo} boxSize="60px" />
-      {/* (7)-> Insert the render of our color mode switch */}
+      <SearchInput />
       <ColorModeSwitch />
     </HStack>
   );
