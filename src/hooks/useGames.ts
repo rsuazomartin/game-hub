@@ -1,14 +1,14 @@
 // Section 8- Building a Video Game Discovery App
 
-// Lesson 25- Refactoring- Extracting a Query Object
+// Section 27- Sorting Games
 
-// 4.- Now we need to apply the same technick in our 'useGames' hook to replace the old state variables
-// --- with the new 'gameQuery' query object >-(4)->
+// >-(5)->.- We came here from the 'GameGrid' component to update it with the 'sortOrder' (ordering: ) 
+// --- parameter which has to be passed to our RAWG API as a new query parameter 
+// --- (in the params: object) >-(5)->
 
-// TESTING OUR CHANGES.- Everything is working but the the playstation 'platform' shows nothing no matter 
-// --- which genre we choose--- something to investigate
-
-// END OF LESSON.- Commit our code with name "Refactoring: extract a query object"
+// TESTING OUR APP.- Fine! the GameGrid shows the selected games in sort order and platform and genre we like.
+// ... but we need to change the label to show the current sort order. Se we need to >-(6)-> go to the App component
+// ... to pass the current sort order to the 'SortSelector' component >-(6)->
 
 import { GameQuery } from "../section-1/App";
 import useData from "./useData";
@@ -29,12 +29,11 @@ export interface Game {
 
 const useGames = (gameQuery: GameQuery) => 
   useData<Game>('/games', 
-  // >-(4)-> This is the only place where we´ll need to work with individual values
+  // >-(5)-> Add the 'ordering: gameQuery.sortOrder' property to the query parameters to be sent to the server
   { params: { 
     genres: gameQuery.genre?.id, 
-    platforms: gameQuery.platform?.id}}, 
-    // >-(4)-> here we pass the dependencies array with only 'gameQuery' so whenever one of his properties
-    // --- changes, it will resend our fetch request
+    platforms: gameQuery.platform?.id,
+    ordering: gameQuery.sortOrder }}, 
     [gameQuery]);
 
 export default useGames;    
