@@ -1,30 +1,32 @@
 // Section 8- Building a Video Game Discovery App
 
-// Lesson 14- Getting Optimized Images
+// Lesson 28- Handling Games Without an Image
 
-// ACTUAL SITUATION.-
-// This images are pretty big, so in slow connections will take time to load them. In this lesson We are going 
-// --- to learn how to convert them to smaller formats without loosing definition to increase speed up the page load.
+// ACTUAL SITUATION.- We need to handle those games without an image so they display properly.
 
-// From the 'useGames' component -(2)-> Create a new utility/service to modify the image URL (with the crop parameter
-// inserted) called "image.URL.ts" in the 'services' folder (this one)
+// 1.- Grab the file 'no-image-placeholder' from the resources compressed file and place it under 
+// --- the assets folder. Now open the 'image-url.ts' component (This one).
 
-// 3.- In this module we´ll define a function "const getCroppedImageURL" with one parameter, which is the URL of
-// --- type string, that will return another URL, don´t forget to export it.
+// 2.- Because this is a static asset, we´re going deploy it with our application, so we´ll import it 
+// --- as a regular module on the top. >-(2)->
 
-// 4.- Now we´ll use the "const index" and assign it the 'indexOf' method on the 'url' variable to find the 
-// --- start of the "media/" literal. 
-// --- -(5)-> We must create also a 'const target' add the ".length" of this literal to find the place to 
-// --- start the insertion, and then slice the 'url' from position 0 to "index", add the crop parameter and 
-// --- the rest of the url after the slice(0, index). Then >-(6)-> return it.
+// >-(2)-> import 'noImage' from the 'no-image-placeholder.webp' file in the assets folder, and return
+// --- 'noImage' when there´s no image available for the game
 
-// 7.- Now go to our "GameCards" component and call "getCroppedImageURL" with the original URL as parameter
+// TESTING OUR APP... Very good !!! 
 
-const getCroppedImageURL = (url: string) => {   // <-(3)-<
-    const target = "media/";   // <-(4)-<
-    const index = url.indexOf(target) + target.length;   // <-(4)-<
-       // <-(6)-< return it
-       return url.slice(0, index) + "crop/600/400/" + url.slice(index);   // <-(5)-<
+// END OF LESSON.- Let´s commit our changes under "Handle games with no image"
+
+
+import noImage from '../assets/no-image-placeholder-6f3882e0.webp'
+
+const getCroppedImageURL = (url: string) => {   
+    // >-(2.a)-> return noImage when the url is not truthy
+    if (!url) return noImage;
+
+    const target = "media/";   
+    const index = url.indexOf(target) + target.length;   
+       return url.slice(0, index) + "crop/600/400/" + url.slice(index);   
 }
 
-export default getCroppedImageURL;   // <-(3)-<
+export default getCroppedImageURL;   
