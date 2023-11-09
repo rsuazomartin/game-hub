@@ -1,21 +1,26 @@
 // Section 8- Building a Video Game Discovery App
 
-// Lesson 22- Highlighting the Selected Genre
+// Lesson 33- Cleaning Up the Genres
 
-// These lesson is to highlight the Genre name when selected (this selection is passed from the App component),
-// --- so we need to >-(1)-> add the "selectedGenre: Genre | null" to the Props, so in this component, when we are
-// --- rendering the <Button> chakra component, se should weight the font to bold when selected or normal
-// --- when unselected
+// ACTUAL SITUATION.- Everything is working fine, but there are some issues with the details of the rendering
+// --- of our genres. One it´s that the name its overlapping the image when large. We fix this with
+// --- >-(1)-> whiteSpace="normal"
 
-// 2.- Now, while rendering the <Button> we should test if the "genre.id === selectedGenre.id" and
-// --- bold it if true or normal otherwise
+// 2.- Our images aspect ratio it´s sometimes different because we are importing images of 600 x 400 px and
+// --- we are showing them in boxes 32 y 32 px. To fix it just add an 'objectFit="cover"' in the <Image>
+// --- component, with this our images will be scaled to fill the container while preserving it´s aspect
+// --- ratio
 
-// 3.- Once our 'GenreList' component renders bold or normal the 'fontWeight' for the genre, we go to the App
-// --- component to receive the 'selectedGenre' from this component
+// 3.- The other thing is that we don´t have a heading for the genres, so do it and assign it a "fontSize='2xl'"
+// --- and add a 'marginBottom={3}'
 
+// TESTING OUR CHANGES... Super!
+
+// END OF LESSON.- Commit our code with name "33: Clean up the genre list"
 import {
   Button,
   HStack,
+  Heading,
   Image,
   List,
   ListItem,
@@ -26,45 +31,47 @@ import useGenres, { Genre } from "../hooks/useGenres";
 import getCroppedImageURL from "../services/image-url";
 import { wrap } from "framer-motion";
 
-// >-(1)-> modify the 'Props' to add the selectedGenre and >-(1.a)_> include it on the parameters
-// --- of the 'GenreList' function
 interface Props {
   onSelectGenre: (genre: Genre) => void;
   selectedGenre: Genre | null;
 }
 
-// >-(1.a)-> insert the 'Props' as parameters in the 'GenreList' function
 const GenreList = ({ selectedGenre, onSelectGenre }: Props) => {
   const { data, isLoading, error } = useGenres();
   if (isLoading) return <Spinner />;
   if (error) return null;
 
   return (
-    <List>
-      {data.map((genre) => (
-        <ListItem key={genre.id} paddingY="5px">
-          <HStack>
-            <Image
-              boxSize="32px"
-              borderRadius={8}
-              src={getCroppedImageURL(genre.image_background)}
-            />
-            <Button
-              // >-(2)-> render the font as bold or normal
-              fontWeight={genre.id === selectedGenre?.id ? "bold" : "normal"}
-              variant="link"
-              fontSize="lg"
-              // >-(6)-> pass 'genre' as parameter to the 'onSelectGenre' call-back function when 'onClick'
-              onClick={() => onSelectGenre(genre)}
-            >
-              <Text textAlign={"left"} whiteSpace={"wrap"}>
-                {genre.name}
-              </Text>
-            </Button>
-          </HStack>
-        </ListItem>
-      ))}
-    </List>
+    <>
+      <Heading marginBottom={3} fontSize="2xl">
+        Genres
+      </Heading>
+      <List>
+        {data.map((genre) => (
+          <ListItem key={genre.id} paddingY="5px">
+            <HStack>
+              <Image
+                boxSize="32px"
+                borderRadius={8}
+                objectFit="cover"
+                src={getCroppedImageURL(genre.image_background)}
+              />
+              <Button
+                fontWeight={genre.id === selectedGenre?.id ? "bold" : "normal"}
+                variant="link"
+                fontSize="lg"
+                onClick={() => onSelectGenre(genre)}
+              >
+                {/* >-(1)-> whiteSpace="normal" and textAling="left */}
+                <Text textAlign="left" whiteSpace="normal">
+                  {genre.name}
+                </Text>
+              </Button>
+            </HStack>
+          </ListItem>
+        ))}
+      </List>
+    </>
   );
 };
 
