@@ -1,27 +1,16 @@
 // Section 8- Building a Video Game Discovery App
 
-// Lesson 31- Searching Games
+// Lesson 32- Adding Dynamic Heading
 
-// >-(7)-> We came here from the 'SearchInput' component to receive the input object. To do this, first we
-// --- add the 'searchText' to our Query object (gameQuery).
+// >-(4)->.- We came here from our new 'GameHeading' component, to render our <GameHeading> component >-(4)->
+// --- TESTING IT... it shows 'undefined undefined games', easy to fix. just render only if it´s truthy or else
+// --- an empty string... TESTING AGAIN... Fine! But we need space at the bottom and a larger font size, and
+// --- also it´ll be better to align both (the heading and the Flex) into a <Box> component and assign the
+// --- padding in only one place, the new Box.
 
-// FOUND PROBLEM.- Our 'SearchInput' component it isn´t a direct child of the App component (you can search it!)
-// --- but of the 'NavBar' component. So if we want to use the 'onSearch' function on the 'NavBar' component,
-// --- we need to pass it from "SearchInput" to 'App' then from the 'App' to the 'NavBar' component.
-// --- This is not practical, but we will do it this way for now; later in advanced topics
-// --- we´ll learn a more elegant way.
+// TESTING OUR APP.- Fine!
 
-// 8.- So, for now, se need to repeat in the 'NavBar' component the 'Props' object where the 'onSearch'
-// --- function it´s passed from the 'SearchInput' to this 'App' component. So go to the NAvBar >-(8)->
-
-// >-(9)-> We came here from the 'NavBar' cause we have an error: "La propiedad 'onSearch falta en el tipo {}',
-// --- pero es obligatoria en el tipo 'Props'", so insert the "onSearch={onSearch}" in the render
-// --- of the <NavBar /> component
-
-// TESTING OUR ADVANCE SO FAR.- Typed some text in the search input field and look at the components tab
-// --- in chrome-dev-tools under App component and see the 'searchText' with the text we typed... Good!
-
-// 10.- Now we should pass this info to the 'useGames' hook to send it to the server >-(10)->
+// END OF LESSON.- Nos it´s time to commit our code under "32 Add a dynamic page heading"
 
 import {
   Box,
@@ -40,6 +29,7 @@ import { Genre } from "../hooks/useGenres";
 import PlatformSelector from "../components/PlatformSelector";
 import { Platform } from "../hooks/useGames";
 import SortSelector from "../components/SortSelector";
+import GameHeading from "../components/GameHeading";
 
 export interface GameQuery {
   genre: Genre | null;
@@ -63,11 +53,6 @@ function App() {
       }}
     >
       <GridItem area="nav">
-        {/* >-(9-> Insert the "onSearch={(onSearch)... }" to the <NavBar /> component. This is the function
-        --- that takes the new 'searchText' and pass it to the 'setGameQuery' function that as parameter
-        --- sends an object which spread all the properties of the 'gameQuery' object and then updates the
-        --- 'searchText' property (NOTE.- onSearch is the 'notification' of a search requirement by the 
-        --- user and 'searchText' is the parameter that passes) */}
         <NavBar
           onSearch={(searchText) => setGameQuery({ ...gameQuery, searchText })}
         />
@@ -81,23 +66,26 @@ function App() {
         </GridItem>
       </Show>
       <GridItem area="main" paddingLeft={2}>
-        {/* >-(1)-> Change 'HStack' for 'Flex', wrap 'PlataformSelector' in 'Box' and give it a paddingRight={5} */}
-        <Flex paddingLeft={1} marginBottom={5}>
-          <Box marginRight={5}>
-            <PlatformSelector
-              selectedPlatform={gameQuery.platform}
-              onSelectPlatform={(platform) =>
-                setGameQuery({ ...gameQuery, platform })
+        {/* >-(4)-> render the new <GameHeading> commponent inside a <Box> along with the previous <Flex> */}
+        <Box paddingLeft={1}>
+          <GameHeading gameQuery={gameQuery} />
+          <Flex marginBottom={5}>
+            <Box marginRight={5}>
+              <PlatformSelector
+                selectedPlatform={gameQuery.platform}
+                onSelectPlatform={(platform) =>
+                  setGameQuery({ ...gameQuery, platform })
+                }
+              />
+            </Box>
+            <SortSelector
+              sortOrder={gameQuery.sortOrder}
+              onSelectSortOrder={(sortOrder) =>
+                setGameQuery({ ...gameQuery, sortOrder })
               }
             />
-          </Box>
-          <SortSelector
-            sortOrder={gameQuery.sortOrder}
-            onSelectSortOrder={(sortOrder) =>
-              setGameQuery({ ...gameQuery, sortOrder })
-            }
-          />
-        </Flex>
+          </Flex>
+        </Box>
         <GameGrid gameQuery={gameQuery} />
       </GridItem>
     </Grid>
