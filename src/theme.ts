@@ -14,7 +14,7 @@
 // --- the 'extendTheme' function called 'colors' which has a property called 'gray' which is also 
 // --- an object with one property for each color option. There we map them with the chosen colors.
 
-// TESTINB OUR APP... Good!
+// TESTING OUR APP... Good!
 
 // END OF LESSON.- Commit our code with name "37: Customize theme to get darker grays"
 
