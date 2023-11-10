@@ -7,7 +7,7 @@
 
 // 3.- Reduce the game grid columns for xlarge screens to 4 instead of 5
 
-// END OF LESSON.- All it´s looking so good so commit our changes "33: Clean up the game gards"
+// END OF LESSON.- All it´s looking so good so commit our changes "34: Clean up the game gards"
 
 import { SimpleGrid, Text } from "@chakra-ui/react";
 import useGames, { Platform } from "../hooks/useGames";
