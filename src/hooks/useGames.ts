@@ -1,16 +1,16 @@
 // Section 8- Building a Video Game Discovery App
 
-// Lesson 31- Searching Games
+// Lesson 35- Adding Emojis
 
-// >-(10)->.- Finally We came here from our 'App' component. Now we should receive this info from the 'SearchInput' 
-// --- component and have to be passed to our 'useData' hook to send it to the server. First we need to 
-// --- add the 'search:' property to the 'params' object and assign it with 'gameQuery.searchText'
+// ACTUAL SITUATION.- We want to add some fun to our game cards addin emojis based on the 'rating_top'
+// --- property of our 'Game' interface (which lays in the object from the API that comes from the server)
 
-// TESTING OUR CHANGES.- We tested combining differente choices by genre, sort options, platform and search text 
-// --- and have looked at the chorme-dev-tools under the App and out query config object shows accordingly, 
-// --- So... prueba superada
+// 1.- First grab the 3 emojis that comes in the emojis folder of the resources compressed file that comes
+// --- with this lesson and paste them into the assets folder
 
-// END OF LESSON.- It´s time to commit our changes under "31: Implement seach"
+// 2.- Add the property 'rating_top: number' to the 'Game' interface
+
+// 3.- We create a new component called 'Emoji.tsx' and go there
 
 import { GameQuery } from "../section-1/App";
 import useData from "./useData";
@@ -26,7 +26,8 @@ export interface Game {
     name: string;
     background_image: string,
     parent_platforms:  { platform: Platform }[],
-    metacritic: number
+    metacritic: number,
+    rating_top: number,
 }
 
 const useGames = (gameQuery: GameQuery) => 

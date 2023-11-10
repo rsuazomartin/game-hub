@@ -1,20 +1,20 @@
 // Section 8- Building a Video Game Discovery App
 
-// Lesson 34- Cleaning Up the Game Cards
+// Lesson 35- Adding Emojis
 
-// ACTUAL SITUATION.- We need to clean up the 'GameCard' component to polish up some minor issues
+// >-(7)->.- We came here from the 'Emoji.tsx' component to add here the new 'Emoji' component >-(7)->
 
-// 1.- Move the platform icons and the game score above the game name. So move it above it and give it
-// --- a marginBottom of {3}
-
-// 2.- We should give more space between cards, so go to the GameGrid component an change the 'spacing={3}'
-// --- >-(2)-> go to the 'GameGrid' component
+// 8.- Now we see that emoji it´s to much close to the game name, give it a marginTop={2}, and the bullsEye
+// --- it´s smaller than the other, givit a dynamic size in the EmojiMap adding a new property called 'boxSize:'
+// --- that´s the beauty of the use of the EmojiMap, there´s no need to specify all this modifications
+// --- below in the code, so go to the 'Emoji' component to do this adjustments
 
 import { Game } from "../hooks/useGames";
 import { Card, CardBody, HStack, Heading, Image } from "@chakra-ui/react";
 import PlatformIconList from "./PlatformIconList";
 import CriticScore from "./CriticScore";
 import getCroppedImageURL from "../services/image-url";
+import Emoji from "./Emoji";
 
 interface Props {
   game: Game;
@@ -31,7 +31,11 @@ const GameCards = ({ game }: Props) => {
           />
           <CriticScore score={game.metacritic} />
         </HStack>
-        <Heading fontSize="2xl">{game.name}</Heading>
+        <Heading fontSize="2xl">
+          {game.name}
+          {/* >-(7)-> render the <Emoji> component passing the 'game.rating' (a number) as a parameter */}
+          <Emoji rating={game.rating_top} />
+        </Heading>
       </CardBody>
     </Card>
   );
