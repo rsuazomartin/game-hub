@@ -30,7 +30,7 @@ interface Props {
 const GameHeading = ({ gameQuery }: Props) => {
   /* >-(3)-> contruct the desider arrangement using literal syntax and store it in 'heading' */
   const heading = `${gameQuery.platform?.name || ""} 
-    ${gameQuery.genre?.name || ""} gameses`;
+    ${gameQuery.genre?.name || ""} games`;
   return (
     <Heading as="h1" marginY={5} fontSize="5xl">
       {/* >-(3)-> render the dynamic 'heading' */}
